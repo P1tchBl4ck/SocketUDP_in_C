@@ -27,21 +27,21 @@ void errore(char* s, int n) {
 }
 
 int main(int argc, char** argv){
-	int 	client_len; /*We're gonna put the size of the structure
-						containing client's data here*/
+	int 	client_len; 	/*We're gonna put the size of the structure
+				containing client's data here*/
 	int 	msg_len;	/*This will contain the length of the message
-						we have to send.*/
+				we have to send.*/
 	int 	port;
 	int 	ret;	/*This will contain the return value
-					of some of the functions we are gonna use*/
+			of some of the functions we are gonna use*/
 	int 	sock_id;
 	char 	buffer[MAX_MSG + 1];	/*This will be used to receive
-									our client's message*/
+					our client's message*/
 	char* 	message;
-	struct 	sockaddr_in client;	/*This structure will contain client's IP
-								and port*/
+	struct 	sockaddr_in client;	/*This structure will contain
+					client's IP and port*/
 	struct 	sockaddr_in myself;	/*This structure will contain
-								our IP and port*/
+					our IP and port*/
 /*Verifying correctness of input values*/
 	if(argc != 3){
 		printf("USAGE: %s PORT MESSAGE\n", argv[0]);
@@ -68,13 +68,11 @@ int main(int argc, char** argv){
 	if(ret)	errore("bind()", -3);
 	ret = recvfrom(sock_id, buffer, MAX_MSG, 0,
 		(struct sockaddr*)&client, (socklen_t*)&client_len);
-
 	if(ret <= 0)	errore("recvfrom()", -4);
 	buffer[ret] = '\0';
 	printf("%s:%d - %s\nAnswering message...\n", inet_ntoa(client.sin_addr),
 						ntohs(client.sin_port), buffer);
 	msg_len = strlen(message) + 1;
-
 	ret = sendto(sock_id, 
 			message ,
 			msg_len,
@@ -82,7 +80,6 @@ int main(int argc, char** argv){
 			(struct sockaddr*)&client,
 			(size_t)sizeof(struct sockaddr_in));
 	if(ret - msg_len)	errore("sendto()", -5);
-
 	if(close(sock_id))	errore("close()", -6);
 	printf("Socket closed\n");
 	return 0;
