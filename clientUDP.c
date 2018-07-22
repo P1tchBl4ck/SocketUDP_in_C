@@ -31,7 +31,7 @@ int main(int argc, char* argv[]){
 	char* 	ip_dest;
 	char* 	msg;
 	struct 	sockaddr_in dest;	/*This structure will contain
-						the IP and the port of the receiver.*/
+					the IP and the port of the receiver.*/
 /*Verifying correctness of input values*/
 	if(argc != 4){
 		printf("USAGE: %s IP_DEST PORT_DEST MESSAGE\n", argv[0]);
@@ -51,7 +51,6 @@ int main(int argc, char* argv[]){
 	inet_aton(ip_dest, &dest.sin_addr);	/*Converting char* to IP and placing it inside receiver structure*/
 	dest.sin_port = htons(port_dest);	/*Converting int to port to place it inside receiver structure*/
 	for(int i = 0; i < 8; i++) dest.sin_zero[i] = 0;
-
 	printf("Sending '%s' to %s:%d...\n", msg, ip_dest, port_dest);
 	ret = sendto(socket_id,
 		msg,
@@ -61,7 +60,6 @@ int main(int argc, char* argv[]){
 	if((ret - msg_len)) my_error("sendto()", -3);
 /*Seeing if server answers to my message*/
 	printf("Waiting for a reply...\n");
-	
 	char buffer[MAX_MSG+1];
 	struct sockaddr_in sender;
 	int sender_len = sizeof(struct sockaddr_in);
@@ -73,7 +71,6 @@ int main(int argc, char* argv[]){
 			(socklen_t*)&sender_len);
 
 	if (ret <= 0)	my_error("recvfrom()", -4);
-
 	buffer[ret] = '\0';
 /*Taking sender's data*/
 	char* ip_sender = strdup(inet_ntoa(sender.sin_addr));
@@ -83,8 +80,6 @@ int main(int argc, char* argv[]){
 	free(ip_sender);
 	printf("Closing socket...\n");
 	if(close(socket_id))	my_error("close()", -5);
-	
-
 	printf("Socket closed\n");
 	return 0;
 }
